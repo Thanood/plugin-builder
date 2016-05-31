@@ -56,11 +56,17 @@ gulp.task('build-amd', function () {
     .pipe(gulp.dest(paths.output + 'amd'));
 });
 
-gulp.task('build-system', function () {
+gulp.task('build-system-dev', function () {
   return gulp.src(paths.source)
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(to5(assign({}, compilerOptions, {modules:'system', plugins: []})))
     .pipe(sourcemaps.write(paths.output + 'system'))
+    .pipe(gulp.dest(paths.output + 'system'));
+});
+
+gulp.task('build-system', function () {
+  return gulp.src(paths.source)
+    .pipe(to5(assign({}, compilerOptions, {modules:'system', plugins: []})))
     .pipe(gulp.dest(paths.output + 'system'));
 });
 
@@ -96,7 +102,7 @@ gulp.task('build', function(callback) {
   return runSequence(
     'clean',
     'build-index',
-    ['build-es6-temp', 'build-es6', 'build-commonjs', 'build-amd', 'build-system'],
+    ['build-es6-temp', 'build-es6', 'build-commonjs', 'build-amd', 'build-system-dev'],
     ['copy-html', 'copy-css'],
     'build-dts',
     callback
